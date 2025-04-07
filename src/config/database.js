@@ -42,6 +42,19 @@ const createTables = () => {
       console.log('Car Controls table ready');
     }
   });
+
+  // Camera Control table
+  db.run(`CREATE TABLE IF NOT EXISTS camera_controls (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    status TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`, (err) => {
+    if (err) {
+      console.error('Error creating camera_controls table', err);
+    } else {
+      console.log('Camera Controls table ready');
+    }
+  });
 };
 
 // Handle application shutdown

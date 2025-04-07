@@ -49,6 +49,23 @@ const validateCarControlAction = (req, res, next) => {
 };
 
 /**
+ * Validates camera control status value
+ */
+const validateCameraControlStatus = (req, res, next) => {
+  const { status } = req.body;
+  
+  if (!status) {
+    return next(new APIError('Status is required', 400));
+  }
+  
+  if (status !== 'on' && status !== 'off') {
+    return next(new APIError('Status must be either "on" or "off"', 400));
+  }
+  
+  next();
+};
+
+/**
  * Validates location data
  */
 const validateLocationData = (req, res, next) => {
@@ -83,5 +100,6 @@ module.exports = {
   validateRequestBody,
   validateIdParam,
   validateCarControlAction,
+  validateCameraControlStatus,
   validateLocationData
 }; 

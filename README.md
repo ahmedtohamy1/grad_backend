@@ -56,6 +56,13 @@ src/
   - `GET /api/car-control` - Get the most recent car control action
   - `GET /api/car-control/all` - Get all car control actions
   - `GET /api/car-control/:id` - Get car control action by ID
+- **Camera Controls:**
+  - `POST /api/camera-control` - Save a new camera control status
+    - Required body: `{ "status": "on" }`
+    - Valid status values: `"on"` or `"off"`
+  - `GET /api/camera-control` - Get the most recent camera control status
+  - `GET /api/camera-control/all` - Get all camera control statuses
+  - `GET /api/camera-control/:id` - Get camera control status by ID
 
 ## Error Handling
 
