@@ -66,7 +66,7 @@ const validateLocationData = (req, res, next) => {
     return next(new APIError('Status is required', 400));
   }
   
-  // Optional: Validate latitude/longitude format
+  // Validate latitude/longitude format - only check if they are numbers
   const latNum = parseFloat(latitude);
   const lonNum = parseFloat(longitude);
   
@@ -74,14 +74,7 @@ const validateLocationData = (req, res, next) => {
     return next(new APIError('Latitude and longitude must be valid numbers', 400));
   }
   
-  // Optional: Validate latitude/longitude ranges
-  if (latNum < -90 || latNum > 90) {
-    return next(new APIError('Latitude must be between -90 and 90 degrees', 400));
-  }
-  
-  if (lonNum < -180 || lonNum > 180) {
-    return next(new APIError('Longitude must be between -180 and 180 degrees', 400));
-  }
+  // Range validation removed - allowing any numeric values
   
   next();
 };

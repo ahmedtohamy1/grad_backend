@@ -16,7 +16,7 @@ const validateLocationData = (location) => {
     throw new Error('Status is required');
   }
   
-  // Optional: Validate latitude/longitude format
+  // Validate latitude/longitude format - only check if they are numbers
   const latNum = parseFloat(latitude);
   const lonNum = parseFloat(longitude);
   
@@ -24,14 +24,7 @@ const validateLocationData = (location) => {
     throw new Error('Latitude and longitude must be valid numbers');
   }
   
-  // Optional: Validate latitude/longitude ranges
-  if (latNum < -90 || latNum > 90) {
-    throw new Error('Latitude must be between -90 and 90 degrees');
-  }
-  
-  if (lonNum < -180 || lonNum > 180) {
-    throw new Error('Longitude must be between -180 and 180 degrees');
-  }
+  // Range validation removed - allowing any numeric values
   
   return true;
 };
