@@ -1,22 +1,18 @@
-const CameraControl = require('../models/cameraControl');
+const HwAuth = require('../models/hwAuth');
 const { APIError } = require('../middleware/errorHandler');
 
 // Helper function to get the description from status code
 const getStatusDescription = (statusCode) => {
   switch (parseInt(statusCode)) {
-    case 11: return 'First camera on';
-    case 12: return 'First camera off';
-    case 13: return 'Second camera on';
-    case 14: return 'Second camera off';
-    case 15: return 'Both cameras on';
-    case 16: return 'Both cameras off';
-    default: return 'Unknown status';
+    case 1: return 'Authenticated';
+    case 0: return 'Not authenticated';
+    default: return 'Unknown authentication status';
   }
 };
 
-const cameraControlController = {
+const hwAuthController = {
   /**
-   * Save a new camera control status
+   * Save a new hardware authentication status
    * @param {Object} req - Request object
    * @param {Object} res - Response object
    * @param {Function} next - Next middleware function
@@ -26,13 +22,13 @@ const cameraControlController = {
       // Request body validation is handled by middleware
       const { status } = req.body;
       
-      CameraControl.create({ status }, (err, result) => {
+      HwAuth.create({ status }, (err, result) => {
         if (err) {
           return next(new APIError(err.message, 500));
         }
         
         res.status(201).json({
-          message: 'Camera control status saved successfully',
+          message: 'Hardware authentication status saved successfully',
           status: status,
           description: getStatusDescription(status),
           id: result ? result.id : null
@@ -44,23 +40,23 @@ const cameraControlController = {
   },
 
   /**
-   * Get the latest camera control status
+   * Get the latest hardware authentication status
    * @param {Object} req - Request object
    * @param {Object} res - Response object
    * @param {Function} next - Next middleware function
    */
   getLatestStatus: (req, res, next) => {
     try {
-      CameraControl.getLatest((err, row) => {
+      HwAuth.getLatest((err, row) => {
         if (err) {
           return next(new APIError(err.message, 500));
         }
         
         if (!row) {
-          throw new APIError('No camera control data found', 404);
+          throw new APIError('No hardware authentication data found', 404);
         }
         
-        res.json({ cameraControl: row });
+        res.json({ hwAuth: row });
       });
     } catch (error) {
       next(error);
@@ -68,19 +64,19 @@ const cameraControlController = {
   },
 
   /**
-   * Get all camera control statuses
+   * Get all hardware authentication statuses
    * @param {Object} req - Request object
    * @param {Object} res - Response object
    * @param {Function} next - Next middleware function
    */
   getAllStatuses: (req, res, next) => {
     try {
-      CameraControl.getAll((err, rows) => {
+      HwAuth.getAll((err, rows) => {
         if (err) {
           return next(new APIError(err.message, 500));
         }
         
-        res.json({ cameraControls: rows });
+        res.json({ hwAuths: rows });
       });
     } catch (error) {
       next(error);
@@ -88,7 +84,7 @@ const cameraControlController = {
   },
 
   /**
-   * Get a camera control by ID
+   * Get a hardware authentication status by ID
    * @param {Object} req - Request object
    * @param {Object} res - Response object
    * @param {Function} next - Next middleware function
@@ -98,19 +94,19 @@ const cameraControlController = {
       const id = req.params.id;
       
       if (!id) {
-        throw new APIError('Camera control ID is required', 400);
+        throw new APIError('Hardware authentication ID is required', 400);
       }
       
-      CameraControl.getById(id, (err, row) => {
+      HwAuth.getById(id, (err, row) => {
         if (err) {
           return next(new APIError(err.message, 500));
         }
         
         if (!row) {
-          throw new APIError(`Camera control with ID ${id} not found`, 404);
+          throw new APIError(`Hardware authentication with ID ${id} not found`, 404);
         }
         
-        res.json({ cameraControl: row });
+        res.json({ hwAuth: row });
       });
     } catch (error) {
       next(error);
@@ -118,4 +114,4 @@ const cameraControlController = {
   }
 };
 
-module.exports = cameraControlController; 
+module.exports = hwAuthController; 

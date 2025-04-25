@@ -55,11 +55,15 @@ const validateCameraControlStatus = (req, res, next) => {
   const { status } = req.body;
   
   if (!status) {
-    return next(new APIError('Status is required', 400));
+    return next(new APIError('Status code is required', 400));
   }
   
-  if (status !== 'on' && status !== 'off') {
-    return next(new APIError('Status must be either "on" or "off"', 400));
+  // Convert to number if it's a string
+  const statusCode = typeof status === 'string' ? parseInt(status) : status;
+  
+  // Validate status is one of the allowed codes
+  if (isNaN(statusCode) || ![11, 12, 13, 14, 15, 16].includes(statusCode)) {
+    return next(new APIError('Status code must be one of: 11, 12, 13, 14, 15, 16', 400));
   }
   
   next();
@@ -96,10 +100,32 @@ const validateLocationData = (req, res, next) => {
   next();
 };
 
+/**
+ * Validates hardware authentication status value
+ */
+const validateHwAuthStatus = (req, res, next) => {
+  const { status } = req.body;
+  
+  if (status === undefined || status === null) {
+    return next(new APIError('Authentication status is required', 400));
+  }
+  
+  // Convert to number if it's a string
+  const statusCode = typeof status === 'string' ? parseInt(status) : status;
+  
+  // Validate status is either 0 or 1
+  if (isNaN(statusCode) || ![0, 1].includes(statusCode)) {
+    return next(new APIError('Authentication status must be either 0 or 1', 400));
+  }
+  
+  next();
+};
+
 module.exports = {
   validateRequestBody,
   validateIdParam,
   validateCarControlAction,
   validateCameraControlStatus,
-  validateLocationData
+  validateLocationData,
+  validateHwAuthStatus
 }; 

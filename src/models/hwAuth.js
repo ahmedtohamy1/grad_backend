@@ -1,17 +1,17 @@
 const db = require('../config/database');
 const { handleDatabaseError } = require('../middleware/errorHandler');
 
-const validateCameraStatus = (status) => {
-  if (!status) {
-    throw new Error('Status code is required');
+const validateHwAuthStatus = (status) => {
+  if (status === undefined || status === null) {
+    throw new Error('Authentication status is required');
   }
   
   // Convert to number if it's a string
   const statusCode = typeof status === 'string' ? parseInt(status) : status;
   
-  // Validate status is one of the allowed codes
-  if (isNaN(statusCode) || ![11, 12, 13, 14, 15, 16].includes(statusCode)) {
-    throw new Error('Status code must be one of: 11, 12, 13, 14, 15, 16');
+  // Validate status is either 0 or 1
+  if (isNaN(statusCode) || ![0, 1].includes(statusCode)) {
+    throw new Error('Authentication status must be either 0 or 1');
   }
   
   return true;
@@ -20,35 +20,27 @@ const validateCameraStatus = (status) => {
 // Get status description based on code
 const getStatusDescription = (statusCode) => {
   switch (parseInt(statusCode)) {
-    case 11:
-      return 'First camera on';
-    case 12:
-      return 'First camera off';
-    case 13:
-      return 'Second camera on';
-    case 14:
-      return 'Second camera off';
-    case 15:
-      return 'Both cameras on';
-    case 16:
-      return 'Both cameras off';
+    case 1:
+      return 'Authenticated';
+    case 0:
+      return 'Not authenticated';
     default:
-      return 'Unknown status';
+      return 'Unknown authentication status';
   }
 };
 
-const CameraControl = {
+const HwAuth = {
   /**
-   * Create a new camera control status
-   * @param {Object} cameraControl - Camera control data
+   * Create a new hardware authentication status
+   * @param {Object} hwAuth - Hardware authentication data
    * @param {Function} callback - Callback function
    */
-  create: (cameraControl, callback) => {
+  create: (hwAuth, callback) => {
     try {
-      const { status } = cameraControl;
-      validateCameraStatus(status);
+      const { status } = hwAuth;
+      validateHwAuthStatus(status);
       
-      const sql = 'INSERT INTO camera_controls (status) VALUES (?)';
+      const sql = 'INSERT INTO hw_auths (status) VALUES (?)';
       db.run(sql, [status], function(err) {
         if (err) {
           return callback(err);
@@ -65,12 +57,12 @@ const CameraControl = {
   },
 
   /**
-   * Get the latest camera control status
+   * Get the latest hardware authentication status
    * @param {Function} callback - Callback function
    */
   getLatest: (callback) => {
     try {
-      const sql = 'SELECT * FROM camera_controls ORDER BY created_at DESC LIMIT 1';
+      const sql = 'SELECT * FROM hw_auths ORDER BY created_at DESC LIMIT 1';
       db.get(sql, [], (err, row) => {
         if (err) {
           return callback(err);
@@ -88,12 +80,12 @@ const CameraControl = {
   },
 
   /**
-   * Get all camera control statuses
+   * Get all hardware authentication statuses
    * @param {Function} callback - Callback function
    */
   getAll: (callback) => {
     try {
-      const sql = 'SELECT * FROM camera_controls ORDER BY created_at DESC';
+      const sql = 'SELECT * FROM hw_auths ORDER BY created_at DESC';
       db.all(sql, [], (err, rows) => {
         if (err) {
           return callback(err);
@@ -114,8 +106,8 @@ const CameraControl = {
   },
 
   /**
-   * Get camera control by ID
-   * @param {Number} id - Camera control ID
+   * Get hardware authentication status by ID
+   * @param {Number} id - Hardware authentication ID
    * @param {Function} callback - Callback function
    */
   getById: (id, callback) => {
@@ -124,7 +116,7 @@ const CameraControl = {
         throw new Error('Valid ID is required');
       }
       
-      const sql = 'SELECT * FROM camera_controls WHERE id = ?';
+      const sql = 'SELECT * FROM hw_auths WHERE id = ?';
       db.get(sql, [id], (err, row) => {
         if (err) {
           return callback(err);
@@ -142,4 +134,4 @@ const CameraControl = {
   }
 };
 
-module.exports = CameraControl; 
+module.exports = HwAuth; 

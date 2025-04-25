@@ -58,11 +58,26 @@ src/
   - `GET /api/car-control/:id` - Get car control action by ID
 - **Camera Controls:**
   - `POST /api/camera-control` - Save a new camera control status
-    - Required body: `{ "status": "on" }`
-    - Valid status values: `"on"` or `"off"`
+    - Required body: `{ "status": 11 }`
+    - Valid status codes:
+      - `11` - First camera on
+      - `12` - First camera off
+      - `13` - Second camera on
+      - `14` - Second camera off
+      - `15` - Both cameras on
+      - `16` - Both cameras off
   - `GET /api/camera-control` - Get the most recent camera control status
   - `GET /api/camera-control/all` - Get all camera control statuses
   - `GET /api/camera-control/:id` - Get camera control status by ID
+- **Hardware Authentication:**
+  - `POST /api/hw-auth` - Save a new hardware authentication status
+    - Required body: `{ "status": 1 }`
+    - Valid status values:
+      - `1` - Authenticated
+      - `0` - Not authenticated
+  - `GET /api/hw-auth` - Get the most recent authentication status
+  - `GET /api/hw-auth/all` - Get all authentication statuses
+  - `GET /api/hw-auth/:id` - Get authentication status by ID
 
 ## Error Handling
 

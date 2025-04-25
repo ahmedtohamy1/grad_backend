@@ -55,6 +55,19 @@ const createTables = () => {
       console.log('Camera Controls table ready');
     }
   });
+  
+  // Hardware Auth table
+  db.run(`CREATE TABLE IF NOT EXISTS hw_auths (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    status INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`, (err) => {
+    if (err) {
+      console.error('Error creating hw_auths table', err);
+    } else {
+      console.log('Hardware Auth table ready');
+    }
+  });
 };
 
 // Handle application shutdown
