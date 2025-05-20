@@ -146,229 +146,55 @@ erDiagram
 
 ## API Endpoints
 
-### Location Management
+For detailed API documentation including request/response formats and examples, please see the [API Endpoints Reference](API_ENDPOINTS.md).
 
-```mermaid
-graph TD
-    A[Client] --> B[POST /api/location]
-    A --> C[GET /api/location]
-    A --> D[GET /api/location/all]
-    A --> E[GET /api/location/:id]
+### Main API Endpoints Overview
 
-    B --> F[Save Location]
-    C --> G[Get Latest Location]
-    D --> H[Get All Locations]
-    E --> I[Get Location by ID]
+- **User Management**
 
-    F --> J[Database]
-    G --> J
-    H --> J
-    I --> J
-```
+  - `POST /api/users/register` - Register a new user (car owner or relative)
+  - `POST /api/users/login` - Login a user
+  - `GET /api/users/profile` - Get user profile
 
-- `POST /api/location` - Save a new location
-  - Required body: `{ "latitude": "37.7749", "longitude": "-122.4194", "status": "active" }`
-  - Status values: "active", "idle", "emergency", "maintenance", etc.
-- `GET /api/location` - Get the most recent location entry
-- `GET /api/location/all` - Get all location entries
-- `GET /api/location/:id` - Get location by ID
+- **User Preferences**
 
-### Vehicle Control
+  - `GET /api/users/preferences` - Get user preferences
+  - `PUT /api/users/preferences` - Update user preferences
+  - `POST /api/users/preferences/toggle-dark-mode` - Toggle dark mode
 
-```mermaid
-graph TD
-    A[Client] --> B[POST /api/car-control]
-    A --> C[GET /api/car-control]
-    A --> D[GET /api/car-control/all]
-    A --> E[GET /api/car-control/:id]
+- **Car Owner & Relative Management**
 
-    B --> F[Execute Command]
-    C --> G[Get Latest Command]
-    D --> H[Get Command History]
-    E --> I[Get Command by ID]
+  - `GET /api/users/owner/relatives` - Get relatives linked to car owner
+  - `POST /api/users/owner/relatives` - Add relative to car owner
+  - `DELETE /api/users/owner/relatives/:relativeId` - Remove relative
+  - `GET /api/users/relative/owners` - Get car owners linked to relative
 
-    F --> J[Database]
-    G --> J
-    H --> J
-    I --> J
-```
+- **Location Management**
 
-- `POST /api/car-control` - Save a new car control action
-  - Required body: `{ "action": "1" }`
-  - Valid actions:
-    - `1` - Forward movement
-    - `2` - Backward movement
-    - `3` - Right turn
-    - `4` - Left turn
-    - `5` - Emergency stop
-- `GET /api/car-control` - Get the most recent car control action
-- `GET /api/car-control/all` - Get all car control actions
-- `GET /api/car-control/:id` - Get car control action by ID
+  - `POST /api/location` - Save a new location
+  - `GET /api/location` - Get the most recent location
+  - `GET /api/location/all` - Get all locations
+  - `GET /api/location/:id` - Get location by ID
 
-### Camera Management
+- **Vehicle Control**
 
-```mermaid
-graph TD
-    A[Client] --> B[POST /api/camera-control]
-    A --> C[GET /api/camera-control]
-    A --> D[GET /api/camera-control/all]
-    A --> E[GET /api/camera-control/:id]
+  - `POST /api/car-control` - Save a new car control action
+  - `GET /api/car-control` - Get the most recent car control action
+  - `GET /api/car-control/all` - Get all car control actions
+  - `GET /api/car-control/:id` - Get car control action by ID
 
-    B --> F[Change Camera State]
-    C --> G[Get Current State]
-    D --> H[Get State History]
-    E --> I[Get State by ID]
+- **Camera Management**
 
-    F --> J[Database]
-    G --> J
-    H --> J
-    I --> J
-```
+  - `POST /api/camera-control` - Save a new camera control status
+  - `GET /api/camera-control` - Get the most recent camera status
+  - `GET /api/camera-control/all` - Get all camera statuses
+  - `GET /api/camera-control/:id` - Get camera status by ID
 
-- `POST /api/camera-control` - Save a new camera control status
-  - Required body: `{ "status": 11 }`
-  - Valid status codes:
-    - `11` - First camera on
-    - `12` - First camera off
-    - `13` - Second camera on
-    - `14` - Second camera off
-    - `15` - Both cameras on
-    - `16` - Both cameras off
-- `GET /api/camera-control` - Get the most recent camera control status
-- `GET /api/camera-control/all` - Get all camera control statuses
-- `GET /api/camera-control/:id` - Get camera control status by ID
-
-### Hardware Authentication
-
-```mermaid
-graph TD
-    A[Client] --> B[POST /api/hw-auth]
-    A --> C[GET /api/hw-auth]
-    A --> D[GET /api/hw-auth/all]
-    A --> E[GET /api/hw-auth/:id]
-
-    B --> F[Set Auth Status]
-    C --> G[Get Current Status]
-    D --> H[Get Status History]
-    E --> I[Get Status by ID]
-
-    F --> J[Database]
-    G --> J
-    H --> J
-    I --> J
-```
-
-- `POST /api/hw-auth` - Save a new hardware authentication status
-  - Required body: `{ "status": 1 }`
-  - Valid status values:
-    - `1` - Authenticated (vehicle is authorized to operate)
-    - `0` - Not authenticated (vehicle is locked)
-- `GET /api/hw-auth` - Get the most recent authentication status
-- `GET /api/hw-auth/all` - Get all authentication statuses
-- `GET /api/hw-auth/:id` - Get authentication status by ID
-
-### User Management
-
-```mermaid
-graph TD
-    A[Client] --> B[POST /api/users/register]
-    A --> C[POST /api/users/login]
-    A --> D[GET /api/users/profile]
-
-    B --> E[Create User Account]
-    C --> F[Authenticate User]
-    D --> G[Get User Profile]
-
-    E --> H[Database]
-    F --> H
-    G --> H
-```
-
-- `POST /api/users/register` - Register a new user
-
-  - Required body for car owner: `{ "email": "owner@example.com", "name": "Car Owner", "password": "password123", "type": "car_owner", "car_name": "My Car" }`
-  - Required body for relative: `{ "email": "relative@example.com", "name": "Relative User", "password": "password123", "type": "relative" }`
-  - Optional fields for car owner: `profile_img`, `car_img`
-  - Returns authentication token
-
-- `POST /api/users/login` - Login an existing user
-
-  - Required body: `{ "email": "user@example.com", "password": "password123" }`
-  - Returns authentication token and user details
-
-- `GET /api/users/profile` - Get current user profile
-  - Requires authentication token
-  - Returns user details
-
-### Car Owner & Relative Management
-
-```mermaid
-graph TD
-    A[Car Owner] --> B[GET /api/users/owner/relatives]
-    A --> C[POST /api/users/owner/relatives]
-    A --> D[DELETE /api/users/owner/relatives/:id]
-
-    E[Relative] --> F[GET /api/users/relative/owners]
-
-    B --> G[Get All Relatives]
-    C --> H[Add Relative]
-    D --> I[Remove Relative]
-    F --> J[Get Connected Car Owners]
-
-    G --> K[Database]
-    H --> K
-    I --> K
-    J --> K
-```
-
-- `GET /api/users/owner/relatives` - Get all relatives linked to car owner
-
-  - Requires authentication token (car owner only)
-  - Returns list of relative users
-
-- `POST /api/users/owner/relatives` - Add relative to car owner
-
-  - Requires authentication token (car owner only)
-  - Required body: `{ "relativeId": 123 }`
-
-- `DELETE /api/users/owner/relatives/:relativeId` - Remove relative from car owner
-
-  - Requires authentication token (car owner only)
-
-- `GET /api/users/relative/owners` - Get all car owners linked to a relative
-  - Requires authentication token
-  - Returns list of car owners with their details
-
-### User Preferences
-
-```mermaid
-graph TD
-    A[Client] --> B[GET /api/users/preferences]
-    A --> C[PUT /api/users/preferences]
-    A --> D[POST /api/users/preferences/toggle-dark-mode]
-
-    B --> E[Get User Preferences]
-    C --> F[Update Preferences]
-    D --> G[Toggle Dark Mode]
-
-    E --> H[Database]
-    F --> H
-    G --> H
-```
-
-- `GET /api/users/preferences` - Get user preferences
-
-  - Requires authentication token
-  - Returns user preferences (dark_mode status)
-
-- `PUT /api/users/preferences` - Update user preferences
-
-  - Requires authentication token
-  - Required body: `{ "dark_mode": true }`
-
-- `POST /api/users/preferences/toggle-dark-mode` - Toggle dark mode
-  - Requires authentication token
-  - Toggles current dark_mode preference
+- **Hardware Authentication**
+  - `POST /api/hw-auth` - Save a new hardware authentication status
+  - `GET /api/hw-auth` - Get the most recent authentication status
+  - `GET /api/hw-auth/all` - Get all authentication statuses
+  - `GET /api/hw-auth/:id` - Get authentication status by ID
 
 ## Security Features
 
