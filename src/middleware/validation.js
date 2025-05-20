@@ -121,11 +121,70 @@ const validateHwAuthStatus = (req, res, next) => {
   next();
 };
 
+/**
+ * Validates user registration data
+ */
+const validateRegistration = (req, res, next) => {
+  const { email, password, name, type } = req.body;
+  
+  // Check required fields
+  if (!email) return next(new APIError('Email is required', 400));
+  if (!password) return next(new APIError('Password is required', 400));
+  if (!name) return next(new APIError('Name is required', 400));
+  if (!type) return next(new APIError('User type is required', 400));
+  
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return next(new APIError('Invalid email format', 400));
+  }
+  
+  // Validate password strength
+  if (password.length < 6) {
+    return next(new APIError('Password must be at least 6 characters', 400));
+  }
+  
+  // Validate user type
+  if (type !== 'car_owner' && type !== 'relative') {
+    return next(new APIError('User type must be either car_owner or relative', 400));
+  }
+  
+  // Additional validation for car owners
+  if (type === 'car_owner') {
+    const { car_name } = req.body;
+    if (!car_name) {
+      return next(new APIError('Car name is required for car owners', 400));
+    }
+  }
+  
+  next();
+};
+
+/**
+ * Validates user preferences data
+ */
+const validateUserPreferences = (req, res, next) => {
+  const { dark_mode } = req.body;
+  
+  if (dark_mode === undefined) {
+    return next(new APIError('Dark mode preference is required', 400));
+  }
+  
+  // Make sure dark_mode is a boolean
+  if (typeof dark_mode !== 'boolean') {
+    return next(new APIError('Dark mode must be a boolean value', 400));
+  }
+  
+  next();
+};
+
 module.exports = {
   validateRequestBody,
   validateIdParam,
   validateCarControlAction,
   validateCameraControlStatus,
   validateLocationData,
-  validateHwAuthStatus
+  validateHwAuthStatus,
+  validateRegistration,
+  validateUserPreferences
 }; 
