@@ -6,22 +6,22 @@ const isValidAction = (action) => {
   if (!action) return false;
   
   const actionNumber = parseInt(action);
-  return actionNumber >= 1 && actionNumber <= 5;
+  return actionNumber >= 5 && actionNumber <= 9;
 };
 
 // Get action description
 const getActionDescription = (action) => {
   switch (action) {
-    case '1':
-      return 'forward';
-    case '2':
-      return 'backward';
-    case '3':
-      return 'right';
-    case '4':
-      return 'left';
     case '5':
       return 'stop';
+    case '6':
+      return 'forward';
+    case '7':
+      return 'back';
+    case '8':
+      return 'right';
+    case '9':
+      return 'left';
     default:
       return 'unknown';
   }
@@ -48,7 +48,7 @@ const carControlController = {
       }
 
       if (!isValidAction(action)) {
-        throw new APIError('Invalid action value. Must be between 1-5', 400);
+        throw new APIError('Invalid action value. Must be between 5-9', 400);
       }
       
       CarControl.create({ action }, (err, result) => {

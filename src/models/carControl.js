@@ -7,8 +7,8 @@ const validateAction = (action) => {
   }
   
   const actionNum = parseInt(action);
-  if (isNaN(actionNum) || actionNum < 1 || actionNum > 5) {
-    throw new Error('Action must be a number between 1 and 5');
+  if (isNaN(actionNum) || actionNum < 5 || actionNum > 9) {
+    throw new Error('Action must be a number between 5 and 9');
   }
   
   return true;

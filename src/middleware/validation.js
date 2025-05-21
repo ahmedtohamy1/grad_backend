@@ -41,8 +41,8 @@ const validateCarControlAction = (req, res, next) => {
   }
   
   const actionNum = parseInt(action);
-  if (isNaN(actionNum) || actionNum < 1 || actionNum > 5) {
-    return next(new APIError('Action must be a number between 1 and 5', 400));
+  if (isNaN(actionNum) || actionNum < 5 || actionNum > 9) {
+    return next(new APIError('Action must be a number between 5 and 9', 400));
   }
   
   next();

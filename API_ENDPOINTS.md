@@ -478,17 +478,17 @@ Authorization: Bearer <your_jwt_token>
 
 ```json
 {
-  "action": "1"
+  "action": "6"
 }
 ```
 
 **Action Values:**
 
-- `1`: Forward movement
-- `2`: Backward movement
-- `3`: Right turn
-- `4`: Left turn
-- `5`: Emergency stop
+- `5`: Stop
+- `6`: Forward movement
+- `7`: Backward movement
+- `8`: Right turn
+- `9`: Left turn
 
 **Response - Success (201 Created):**
 
@@ -497,7 +497,7 @@ Authorization: Bearer <your_jwt_token>
   "message": "Car control action saved successfully",
   "control": {
     "id": 1,
-    "action": "1"
+    "action": "6"
   }
 }
 ```
@@ -518,7 +518,7 @@ Authorization: Bearer <your_jwt_token>
 {
   "control": {
     "id": 1,
-    "action": "1",
+    "action": "6",
     "created_at": "2023-07-15T14:32:45.123Z"
   }
 }
@@ -541,12 +541,12 @@ Authorization: Bearer <your_jwt_token>
   "controls": [
     {
       "id": 2,
-      "action": "3",
+      "action": "8",
       "created_at": "2023-07-15T14:35:45.123Z"
     },
     {
       "id": 1,
-      "action": "1",
+      "action": "6",
       "created_at": "2023-07-15T14:32:45.123Z"
     }
   ]
@@ -569,7 +569,7 @@ Authorization: Bearer <your_jwt_token>
 {
   "control": {
     "id": 1,
-    "action": "1",
+    "action": "6",
     "created_at": "2023-07-15T14:32:45.123Z"
   }
 }

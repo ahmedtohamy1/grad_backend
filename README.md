@@ -196,6 +196,35 @@ For detailed API documentation including request/response formats and examples, 
   - `GET /api/hw-auth/all` - Get all authentication statuses
   - `GET /api/hw-auth/:id` - Get authentication status by ID
 
+### Car Control Action Values
+
+| Value | Action  |
+| ----- | ------- |
+| 5     | stop    |
+| 6     | forward |
+| 7     | back    |
+| 8     | right   |
+| 9     | left    |
+
+#### Example Request
+
+```json
+{
+  "action": "6"
+}
+```
+
+#### Example Response
+
+```json
+{
+  "message": "Car control action saved successfully",
+  "action": "6",
+  "description": "forward",
+  "id": 1
+}
+```
+
 ## Security Features
 
 The API implements several security features:
