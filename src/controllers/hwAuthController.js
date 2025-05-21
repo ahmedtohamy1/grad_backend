@@ -53,7 +53,7 @@ const hwAuthController = {
         }
         
         if (!row) {
-          throw new APIError('No hardware authentication data found', 404);
+          return next(new APIError('No hardware authentication data found', 404));
         }
         
         res.json({ hwAuth: row });
@@ -103,7 +103,7 @@ const hwAuthController = {
         }
         
         if (!row) {
-          throw new APIError(`Hardware authentication with ID ${id} not found`, 404);
+          return next(new APIError(`Hardware authentication with ID ${id} not found`, 404));
         }
         
         res.json({ hwAuth: row });
