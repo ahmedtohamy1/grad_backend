@@ -119,7 +119,20 @@ const createTables = () => {
   });
 };
 
-// Handle application shutdown
+  // DMS (Driver Monitoring System) table
+  db.run(`CREATE TABLE IF NOT EXISTS dms (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    status INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`, (err) => {
+    if (err) {
+      console.error('Error creating dms table', err);
+    } else {
+      console.log('DMS table ready');
+    }
+  });
+
+  // Handle application shutdown
 process.on('SIGINT', () => {
   db.close((err) => {
     if (err) {

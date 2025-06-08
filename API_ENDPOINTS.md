@@ -12,6 +12,7 @@ This document provides detailed information about all available API endpoints, i
 - [Vehicle Control](#vehicle-control)
 - [Camera Management](#camera-management)
 - [Hardware Authentication](#hardware-authentication)
+- [Driver Monitoring System (DMS)](#driver-monitoring-system-dms)
 
 ## Authentication
 
@@ -802,3 +803,98 @@ Authorization: Bearer <your_jwt_token>
 **Error Responses:**
 
 - `404 Not Found`: Authentication status with specified ID not found
+
+## Driver Monitoring System (DMS)
+
+### Create DMS Status
+
+**Endpoint:** `POST /api/dms`
+
+**Authentication:** None (consider adding in production)
+
+**Request Body:**
+
+```json
+{
+  "status": 1
+}
+```
+
+**Status Values:**
+
+- `1`: Issue detected
+- `0`: No issue detected
+
+**Response - Success (201 Created):**
+
+```json
+{
+  "message": "DMS status created successfully",
+  "dms": {
+    "id": 1,
+    "status": 1,
+    "created_at": "2023-07-15T14:32:45.123Z"
+  }
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request`: Missing status or invalid status value
+
+### Get Latest DMS Status
+
+**Endpoint:** `GET /api/dms/latest`
+
+**Authentication:** None (consider adding in production)
+
+**Response - Success:**
+
+```json
+{
+  "dms": {
+    "id": 1,
+    "status": 1,
+    "created_at": "2023-07-15T14:32:45.123Z"
+  }
+}
+```
+
+**Error Responses:**
+
+- `404 Not Found`: No DMS data found
+
+### Get DMS History
+
+**Endpoint:** `GET /api/dms/history`
+
+**Authentication:** Required
+
+**Query Parameters:**
+
+- `limit` (optional): Number of records to return (default: 20)
+- `offset` (optional): Number of records to skip (default: 0)
+
+**Response - Success:**
+
+```json
+{
+  "count": 2,
+  "dmsEntries": [
+    {
+      "id": 2,
+      "status": 0,
+      "created_at": "2023-07-15T14:35:45.123Z"
+    },
+    {
+      "id": 1,
+      "status": 1,
+      "created_at": "2023-07-15T14:32:45.123Z"
+    }
+  ]
+}
+```
+
+**Error Responses:**
+
+- `401 Unauthorized`: Missing or invalid token

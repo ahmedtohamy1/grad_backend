@@ -5,6 +5,7 @@ const carControlRoutes = require('./carControlRoutes');
 const cameraControlRoutes = require('./cameraControlRoutes');
 const hwAuthRoutes = require('./hwAuthRoutes');
 const userRoutes = require('./userRoutes');
+const dmsRoutes = require('./dmsRoutes');
 
 // Welcome route
 router.get('/', (req, res) => {
@@ -17,5 +18,6 @@ router.use('/api/car-control', carControlRoutes);
 router.use('/api/camera-control', cameraControlRoutes);
 router.use('/api/hw-auth', hwAuthRoutes);
 router.use('/api/users', userRoutes);
+router.use('/api/dms', dmsRoutes);
 
 module.exports = router; 
