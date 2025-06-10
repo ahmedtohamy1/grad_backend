@@ -157,6 +157,64 @@ const User = {
   },
 
   /**
+   * Update user profile (name and email)
+   * @param {Number} userId - User ID
+   * @param {Object} profileData - User profile data to update
+   * @param {Function} callback - Callback function
+   */
+  updateProfile: (userId, profileData, callback) => {
+    try {
+      const { name, email } = profileData;
+      
+      // Validate inputs
+      if (!name && !email) {
+        return callback(new APIError('No data provided for update', 400));
+      }
+      
+      if (email && !validateEmail(email)) {
+        return callback(new APIError('Invalid email format', 400));
+      }
+      
+      // Get current user data
+      User.getById(userId, (err, currentUser) => {
+        if (err) {
+          return callback(err);
+        }
+        
+        // Prepare update data
+        const updatedName = name || currentUser.name;
+        const updatedEmail = email || currentUser.email;
+        
+        // Update user
+        const sql = `UPDATE users SET name = ?, email = ? WHERE id = ?`;
+        
+        db.run(sql, [updatedName, updatedEmail, userId], function(err) {
+          if (err) {
+            // Check for duplicate email
+            if (err.message.includes('UNIQUE constraint failed')) {
+              return callback(new APIError('Email already exists', 409));
+            }
+            return callback(err);
+          }
+          
+          if (this.changes === 0) {
+            return callback(new APIError(`User with ID ${userId} not found`, 404));
+          }
+          
+          callback(null, {
+            id: userId,
+            name: updatedName,
+            email: updatedEmail,
+            updated: true
+          });
+        });
+      });
+    } catch (error) {
+      callback(error);
+    }
+  },
+
+  /**
    * Get car owner details with relatives
    * @param {Number} ownerId - Car owner ID
    * @param {Function} callback - Callback function

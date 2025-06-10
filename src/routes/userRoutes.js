@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const { authenticateToken, isCarOwner } = require('../middleware/auth');
-const { validateRequestBody, validateRegistration, validateUserPreferences } = require('../middleware/validation');
+const { validateRequestBody, validateRegistration, validateUserPreferences, validateProfileUpdate } = require('../middleware/validation');
 
 // Public routes
 router.post('/register', validateRequestBody, validateRegistration, userController.register);
@@ -10,6 +10,7 @@ router.post('/login', validateRequestBody, userController.login);
 
 // Protected routes - require authentication
 router.get('/profile', authenticateToken, userController.getProfile);
+router.put('/profile', authenticateToken, validateRequestBody, validateProfileUpdate, userController.updateProfile);
 
 // Car owner specific routes
 router.get('/owner/relatives', authenticateToken, isCarOwner, userController.getOwnerWithRelatives);

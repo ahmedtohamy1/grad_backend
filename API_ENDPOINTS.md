@@ -147,6 +147,42 @@ Authorization: Bearer <your_jwt_token>
 - `401 Unauthorized`: Missing or invalid token
 - `404 Not Found`: User not found
 
+### Update User Profile
+
+**Endpoint:** `PUT /api/users/profile`
+
+**Authentication:** Required
+
+**Request Body:**
+
+```json
+{
+  "name": "Updated Name", // optional
+  "email": "newemail@example.com" // optional
+}
+```
+
+**Response - Success:**
+
+```json
+{
+  "message": "Profile updated successfully",
+  "user": {
+    "id": 1,
+    "name": "Updated Name",
+    "email": "newemail@example.com",
+    "updated": true
+  }
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request`: No fields provided or invalid email format
+- `401 Unauthorized`: Missing or invalid token
+- `404 Not Found`: User not found
+- `409 Conflict`: Email already exists
+
 ## User Preferences
 
 ### Get User Preferences

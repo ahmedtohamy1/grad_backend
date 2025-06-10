@@ -178,6 +178,28 @@ const validateUserPreferences = (req, res, next) => {
   next();
 };
 
+/**
+ * Validates user profile update data
+ */
+const validateProfileUpdate = (req, res, next) => {
+  const { name, email } = req.body;
+  
+  // At least one field must be provided
+  if (!name && !email) {
+    return next(new APIError('At least one field (name or email) must be provided', 400));
+  }
+  
+  // Validate email format if provided
+  if (email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return next(new APIError('Invalid email format', 400));
+    }
+  }
+  
+  next();
+};
+
 module.exports = {
   validateRequestBody,
   validateIdParam,
@@ -186,5 +208,6 @@ module.exports = {
   validateLocationData,
   validateHwAuthStatus,
   validateRegistration,
-  validateUserPreferences
+  validateUserPreferences,
+  validateProfileUpdate
 }; 

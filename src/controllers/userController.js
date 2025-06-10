@@ -91,6 +91,32 @@ const userController = {
   },
 
   /**
+   * Update user profile (name and email)
+   * @param {Object} req - Request object
+   * @param {Object} res - Response object
+   * @param {Function} next - Next middleware function
+   */
+  updateProfile: (req, res, next) => {
+    try {
+      const userId = req.user.id; // From auth middleware
+      const { name, email } = req.body;
+      
+      User.updateProfile(userId, { name, email }, (err, updatedUser) => {
+        if (err) {
+          return next(err);
+        }
+        
+        res.json({
+          message: 'Profile updated successfully',
+          user: updatedUser
+        });
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  /**
    * Get car owner details with relatives
    * @param {Object} req - Request object
    * @param {Object} res - Response object
