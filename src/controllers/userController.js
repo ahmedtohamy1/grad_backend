@@ -99,9 +99,9 @@ const userController = {
   updateProfile: (req, res, next) => {
     try {
       const userId = req.user.id; // From auth middleware
-      const { name, email } = req.body;
+      const { name, email, car_name } = req.body;
       
-      User.updateProfile(userId, { name, email }, (err, updatedUser) => {
+      User.updateProfile(userId, { name, email, car_name }, (err, updatedUser) => {
         if (err) {
           return next(err);
         }

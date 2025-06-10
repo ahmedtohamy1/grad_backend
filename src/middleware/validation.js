@@ -182,11 +182,11 @@ const validateUserPreferences = (req, res, next) => {
  * Validates user profile update data
  */
 const validateProfileUpdate = (req, res, next) => {
-  const { name, email } = req.body;
+  const { name, email, car_name } = req.body;
   
   // At least one field must be provided
-  if (!name && !email) {
-    return next(new APIError('At least one field (name or email) must be provided', 400));
+  if (!name && !email && !car_name) {
+    return next(new APIError('At least one field (name, email, or car_name) must be provided', 400));
   }
   
   // Validate email format if provided

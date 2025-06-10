@@ -164,10 +164,10 @@ const User = {
    */
   updateProfile: (userId, profileData, callback) => {
     try {
-      const { name, email } = profileData;
+      const { name, email, car_name } = profileData;
       
       // Validate inputs
-      if (!name && !email) {
+      if (!name && !email && !car_name) {
         return callback(new APIError('No data provided for update', 400));
       }
       
@@ -184,11 +184,12 @@ const User = {
         // Prepare update data
         const updatedName = name || currentUser.name;
         const updatedEmail = email || currentUser.email;
+        const updatedCarName = car_name !== undefined ? car_name : currentUser.car_name;
         
         // Update user
-        const sql = `UPDATE users SET name = ?, email = ? WHERE id = ?`;
+        const sql = `UPDATE users SET name = ?, email = ?, car_name = ? WHERE id = ?`;
         
-        db.run(sql, [updatedName, updatedEmail, userId], function(err) {
+        db.run(sql, [updatedName, updatedEmail, updatedCarName, userId], function(err) {
           if (err) {
             // Check for duplicate email
             if (err.message.includes('UNIQUE constraint failed')) {
@@ -205,6 +206,7 @@ const User = {
             id: userId,
             name: updatedName,
             email: updatedEmail,
+            car_name: updatedCarName,
             updated: true
           });
         });

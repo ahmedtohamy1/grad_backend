@@ -158,7 +158,8 @@ Authorization: Bearer <your_jwt_token>
 ```json
 {
   "name": "Updated Name", // optional
-  "email": "newemail@example.com" // optional
+  "email": "newemail@example.com", // optional
+  "car_name": "My New Tesla" // optional
 }
 ```
 
@@ -171,6 +172,7 @@ Authorization: Bearer <your_jwt_token>
     "id": 1,
     "name": "Updated Name",
     "email": "newemail@example.com",
+    "car_name": "My New Tesla",
     "updated": true
   }
 }
